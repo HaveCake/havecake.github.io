@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>分班程序</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 6px 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            width: 120px;
+            height: 40px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<h1>分班程序</h1>
+<p>输入学生的姓名，然后点击“随机分班”按钮。</p>
+<p>请在下面指定班级数量和每个班级的人数。</p>
+<input autocomplete="off" id="students" placeholder="姓名，用逗号分隔" required type="text">
+<input id="class_number" max="100" min="1" placeholder="班级数量" required type="number" value="5">
+<input id="class_size" max="70" min="1" placeholder="班级人数" required type="number" value="20">
+<button id="randomize">随机分班</button>
+<p id="result"></p>
+
+<script>
+    document.getElementById('randomize').addEventListener('click', function() {
+        const input = document.getElementById('students');
+        const names = input.value.split(',');
+        if (names.length === 0) {
+            alert('请确保输入学生的姓名');
+            return;
+        }
+
+        const classNumberInput = document.getElementById('class_number');
+        const classNumber = Number(classNumberInput.value);
+
+        const classSizeInput = document.getElementById('class_size');
+        const classSize = Number(classSizeInput.value);
+
+        if (classNumber <= 0 || classNumber > 100 || classSize <= 0 || classSize > 70) {
+            alert('班级数量应在1到100之间，班级人数应在1到70之间');
+            return;
+        }
+
+        const classes = [...Array(classNumber)].map(() => []);
+        const shuffledNames = shuffleArray(names);
+
+        let remainingStudents = shuffledNames;
+        for (let i = 0; i < classNumber; i++) {
+            const studentsForThisClass = remainingStudents.splice(0, Math.min(remainingStudents.length, classSize));
+            classes[i] = studentsForThisClass;
+        }
+
+        let result = '';
+        for (let i = 0; i < classes.length; i++) {
+            result += `班${i + 1}: ${classes[i].join(', ')}\n`;
+        }
+
+        document.getElementById('result').innerHTML = `分班结果：\n${result}`;
+    });
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]]; // ES6 destructuring swap
+        }
+        return array;
+    }
+</script>
+</body>
+</html>

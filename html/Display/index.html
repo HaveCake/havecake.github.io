@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" id="viewport" name="viewport">
+    <link href="favicon.png" rel="shortcut icon" type="image/x-icon">
+    <title>点阵显示器</title>
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        .list {
+            text-align: center;
+            margin-top: 16px;
+            animation: opacity .5s;
+        }
+
+        .list h3 {
+            color: #fff;
+        }
+
+        .list button {
+            width: 80%;
+            max-width: 640px;
+            padding: 8px 16px;
+            margin: 8px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            transition: .2s;
+        }
+
+        .list button:hover {
+            background-color: #448AFF;
+            color: #fff;
+        }
+
+        .list button:active {
+            transform: scale(.95);
+        }
+
+        .sign {
+            position: fixed;
+            bottom: 16px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            animation: bottom .5s;
+        }
+
+        @keyframes opacity {
+            from {
+                opacity: 0;
+            }
+
+            to: {}
+        }
+
+        @keyframes bottom {
+            from {
+                transform: translateY(32px);
+            }
+
+            to: {}
+        }
+    </style>
+</head>
+
+<body>
+<div class="list">
+    <h3>点阵显示器</h3>
+    <button onclick="javascript:location.href='Burger.html';">像素画</button>
+    <button onclick="javascript:location.href='maker.html';">点阵造字器</button>
+    <button onclick="javascript:location.href='clock.html';">时钟</button>
+    <button onclick="javascript:location.href='noise.html';">白噪声</button>
+    <button onclick="javascript:location.href='function.html';">函数图像</button>
+</div>
+<div class="sign">Made by Burger Studio.</div>
+</body>
+
+</html>
