@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" id="viewport" name="viewport">
+    <link href="favicon.png" rel="shortcut icon" type="image/x-icon">
+    <title>函数图象 - 点阵显示器</title>
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        #screen {
+            width: 320px;
+            height: 320px;
+            position: fixed;
+            left: calc(50% - 164px);
+            top: calc(50% - 128px);
+            background-color: #333;
+            padding: 4px;
+            font-size: 0;
+        }
+
+        .block {
+            width: 1.25px;
+            height: 1.25px;
+            background-color: #666;
+            display: inline-block;
+            margin: 0;
+            vertical-align: top;
+            transition: background-color .3s;
+        }
+
+        .topDiv {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 16px;
+            z-index: 114514;
+            animation: top .5s;
+        }
+
+        .topDiv button {
+            padding: 8px 16px;
+            margin: 0 8px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            transition: .2s;
+        }
+
+        .topDiv p {
+            text-align: center;
+            color: #fff;
+        }
+
+        .topDiv input {
+            background-color: #333;
+            border: none;
+            border-radius: 8px;
+            outline: none;
+            color: #fff;
+            padding: 4px;
+            transition: .2s;
+        }
+
+        .topDiv input:focus {
+            background-color: #ccc;
+            color: #000;
+        }
+
+        .topDiv button:hover {
+            background-color: #448AFF;
+            color: #fff;
+        }
+
+        .topDiv button:active {
+            transform: scale(.95);
+        }
+
+        .sign {
+            position: fixed;
+            bottom: 16px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            animation: bottom .5s;
+        }
+
+        @keyframes top {
+            from {
+                transform: translateY(-64px);
+            }
+
+            to: {}
+        }
+
+        @keyframes bottom {
+            from {
+                transform: translateY(32px);
+            }
+
+            to: {}
+        }
+
+        #log {
+            position: fixed;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            bottom: 48px;
+            animation: bottom .5s;
+        }
+    </style>
+</head>
+
+<body>
+<div class="topDiv">
+    <button onclick="javascript:location.href='index.html';">首页</button>
+    <button id="switchClear">绘制前清除：开</button>
+    <br>
+    <button id="switchXy" style="margin-top: 8px;">显示坐标轴：开</button>
+    <button id="drawBtn">绘制</button>
+    <br>
+    <p style="margin: 16px 0 0 0;">
+        y = <input id="funcInput"><br>
+        颜色：<input id="colorInput" style="width: 64px;margin: 8px 8px 0 0;" value="#fff">
+        精度：<input id="acc" style="width: 64px;" value="0.01"></p>
+</div>
+<div id="screen"></div>
+<div class="sign">Made by Burger Studio.</div>
+<div id="log">请稍等......</div>
+<script>
+    window.onload = function() {
+        createBlocks();
+        xy = new Array(255);
+        for (var i = 1; i < 256; i++) {
+            if (i == 128) {
+                xy[i - 1] = [];
+                for (var j = 1; j < 256; j++) {
+                    xy[i - 1].push(j);
+                }
+            } else {
+                xy[i - 1] = [128];
+            }
+        }
+    };
+
+    function createBlocks() {
+        var blocks = "";
+        for (var i = 1; i < 256; i++) {
+            for (var j = 1; j < 256; j++) {
+                blocks += `<div class="block" id="block_` + i + `_` + j + `"></div>`;
+            }
+            blocks += "<br>";
+        }
+        document.getElementById("screen").innerHTML = blocks;
+        log("屏幕元素创建完毕。");
+    }
+
+    function display(item, clear = 0, color = "#fff") {
+        for (var i = 1; i < 256; i++) {
+            for (var j = 1; j < 256; j++) {
+                if (item[i - 1] != undefined && item[i - 1].indexOf(j) != -1) {
+                    document.getElementById("block_" + i + "_" + j).style.backgroundColor = color;
+                } else if (clear == 1) {
+                    document.getElementById("block_" + i + "_" + j).style.backgroundColor = "#666";
+                }
+            }
+        }
+    }
+
+    funcInput = document.getElementById("funcInput");
+    colorInput = document.getElementById("colorInput");
+
+    function draw(input, clear = 0, color) {
+        var funcArray = [];
+        for (var l = 0; l < 256; l++) {
+            funcArray.push([]);
+        }
+        var acc = Number(document.getElementById("acc").value);
+        for (x = -127; x < 128; x += acc) {
+            if (127 - Math.floor(eval(input)) >= 1 && 127 - Math.floor(eval(input)) < 256) {
+                funcArray[127 - Math.floor(eval(input))].push(Math.floor(x + 128));
+            }
+        }
+        display(funcArray, clear, color == "" ? "#fff" : color);
+        log("绘制完毕。");
+    }
+    switchClear = document.getElementById("switchClear");
+    clear_1 = 1;
+    switchClear.onclick = function() {
+        if (clear_1 == 1) {
+            clear_1 = 0;
+            switchClear.innerText = "绘制前清除：关";
+        } else {
+            clear_1 = 1;
+            switchClear.innerText = "绘制前清除：开";
+        }
+    };
+    switchXy = document.getElementById("switchXy");
+    xy_1 = 1;
+    switchXy.onclick = function() {
+        if (xy_1 == 1) {
+            xy_1 = 0;
+            switchXy.innerText = "显示坐标轴：关";
+        } else {
+            xy_1 = 1;
+            switchXy.innerText = "显示坐标轴：开";
+        }
+    };
+
+    function log(msg) {
+        document.getElementById("log").innerText = msg;
+    }
+    document.getElementById("drawBtn").onclick = function() {
+        log("请稍等......");
+        window.setTimeout(function() {
+            try {
+                if (xy_1 == 1) {
+                    display(xy, clear_1, "#999");
+                    draw(funcInput.value, 0, colorInput.value);
+                } else {
+                    draw(funcInput.value, clear_1, colorInput.value);
+                }
+            } catch (error) {
+                log(error);
+            }
+        }, 100);
+    };
+</script>
+</body>
+
+</html>

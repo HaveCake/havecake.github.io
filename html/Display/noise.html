@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1" id="viewport" name="viewport">
+    <link href="favicon.png" rel="shortcut icon" type="image/x-icon">
+    <title>白噪声 - 点阵显示器</title>
+    <style>
+        body {
+            background-color: #000;
+        }
+
+        #screen {
+            width: 320px;
+            height: 320px;
+            position: fixed;
+            left: calc(50% - 164px);
+            top: calc(50% - 164px);
+            background-color: #333;
+            padding: 4px;
+        }
+
+        .block {
+            width: 18px;
+            height: 18px;
+            background-color: #666;
+            display: inline-block;
+            margin: 1px;
+            vertical-align: top;
+            transition: background-color .5s;
+        }
+
+        .topDiv {
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 16px;
+            z-index: 114514;
+            animation: top .5s;
+        }
+
+        .topDiv button {
+            padding: 8px 16px;
+            margin: 0 8px;
+            border-radius: 8px;
+            border: none;
+            outline: none;
+            transition: .2s;
+        }
+
+        .topDiv button:hover {
+            background-color: #448AFF;
+            color: #fff;
+        }
+
+        .topDiv button:active {
+            transform: scale(.95);
+        }
+
+        .sign {
+            position: fixed;
+            bottom: 16px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            animation: bottom .5s;
+        }
+
+        @keyframes top {
+            from {
+                transform: translateY(-64px);
+            }
+
+            to: {}
+        }
+
+        @keyframes bottom {
+            from {
+                transform: translateY(32px);
+            }
+
+            to: {}
+        }
+    </style>
+</head>
+
+<body>
+<div class="topDiv">
+    <button onclick="javascript:location.href='index.html';">首页</button>
+</div>
+<div id="screen"></div>
+<div class="sign">Made by Burger Studio.</div>
+<script>
+    window.onload = function() {
+        createBlocks();
+        window.setInterval(function() {
+            display(noise(), 1);
+        }, 10);
+    };
+
+    function createBlocks() {
+        for (var i = 1; i < 17; i++) {
+            for (var j = 1; j < 17; j++) {
+                var block = document.createElement("div");
+                block.classList.add("block");
+                block.id = "block_" + i + "_" + j;
+                document.getElementById("screen").appendChild(block);
+            }
+        }
+    }
+
+    function display(item, clear = 0, color = "#fff") {
+        for (var i = 1; i < 17; i++) {
+            for (var j = 1; j < 17; j++) {
+                if (item[i - 1] != undefined && item[i - 1].indexOf(j) != -1) {
+                    document.getElementById("block_" + i + "_" + j).style.backgroundColor = color;
+                } else if (clear == 1) {
+                    document.getElementById("block_" + i + "_" + j).style.backgroundColor = "#666";
+                }
+            }
+        }
+    }
+
+    function noise() {
+        var noiseArray = [];
+        for (var i = 0; i < 16; i++) {
+            var noiseArray_1 = [];
+            for (var j = 0; j < 16; j++) {
+                if (Math.random() < 0.5) {
+                    noiseArray_1.push(j + 1);
+                }
+            }
+            noiseArray.push(noiseArray_1);
+        }
+        return noiseArray;
+    }
+</script>
+</body>
+
+</html>
