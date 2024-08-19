@@ -193,7 +193,7 @@
 <p>我就是HaveCake，也可以叫我Hc</p>
 <p>本人现在是一名在校初中生，文笔和想法可能会比较青涩，恳请各位多多提出修改意见</p>
 <p>因为是在校初中生，所以博客内容更新没有固定时间，随缘更新~</p>
-<p>邮箱：<a href="mailto:&#x48;&#97;&#118;&#x65;&#x43;&#97;&#107;&#101;&#64;&#x32;&#x30;&#x31;&#49;&#x30;&#x32;&#50;&#x38;&#x2e;&#x78;&#121;&#x7a;">&#x48;&#97;&#118;&#x65;&#x43;&#97;&#107;&#101;&#64;&#x32;&#x30;&#x31;&#49;&#x30;&#x32;&#50;&#x38;&#x2e;&#x78;&#121;&#x7a;</a></p>
+<p>邮箱：<a href="mailto:&#72;&#97;&#x76;&#101;&#x43;&#x61;&#x6b;&#101;&#x40;&#50;&#48;&#49;&#49;&#48;&#50;&#x32;&#56;&#46;&#x78;&#x79;&#x7a;">&#72;&#97;&#x76;&#101;&#x43;&#x61;&#x6b;&#101;&#x40;&#50;&#48;&#49;&#49;&#48;&#50;&#x32;&#56;&#46;&#x78;&#x79;&#x7a;</a></p>
 <p>微信：zhangboan1</p>
 <hr>
 <h2 id="关于网站"><a href="#关于网站" class="headerlink" title="关于网站"></a>关于网站</h2><h3 id="当前版本-v1-2"><a href="#当前版本-v1-2" class="headerlink" title="当前版本 v1.2"></a>当前版本 v1.2</h3><h4 id="v1-2版本更新"><a href="#v1-2版本更新" class="headerlink" title="v1.2版本更新"></a>v1.2版本更新</h4><ol>
@@ -222,6 +222,12 @@
     
 
 
+    
+  
+  <div class="comments giscus-container">
+  </div>
+  
+  
 </div>
   </main>
 
@@ -277,6 +283,34 @@
 
 
 
+<script class="next-config" data-name="giscus" type="application/json">{"enable":true,"repo":"HaveCake/havecake.github.io","repo_id":"R_kgDOLgsm8Q","category":"Announcements","category_id":"DIC_kwDOLgsm8c4Chxt_","mapping":"pathname","strict":0,"reactions_enabled":1,"emit_metadata":1,"theme":"preferred_color_scheme","lang":"zh-CN","crossorigin":"anonymous","input_position":"top","loading":"lazy"}</script>
+
+<script>
+document.addEventListener('page:loaded', () => {
+  if (!CONFIG.page.comments) return;
+
+  NexT.utils.loadComments('.giscus-container')
+    .then(() => NexT.utils.getScript('https://giscus.app/client.js', {
+      attributes: {
+        async                   : true,
+        crossOrigin             : 'anonymous',
+        'data-repo'             : CONFIG.giscus.repo,
+        'data-repo-id'          : CONFIG.giscus.repo_id,
+        'data-category'         : CONFIG.giscus.category,
+        'data-category-id'      : CONFIG.giscus.category_id,
+        'data-mapping'          : CONFIG.giscus.mapping,
+        'data-strict'           : CONFIG.giscus.strict,
+        'data-reactions-enabled': CONFIG.giscus.reactions_enabled,
+        'data-emit-metadata'    : CONFIG.giscus.emit_metadata,
+        'data-theme'            : CONFIG.giscus.theme,
+        'data-lang'             : CONFIG.giscus.lang,
+        'data-input-position'   : CONFIG.giscus.input_position,
+        'data-loading'          : CONFIG.giscus.loading
+      },
+      parentNode: document.querySelector('.giscus-container')
+    }));
+});
+</script>
 
 </body>
 </html>
