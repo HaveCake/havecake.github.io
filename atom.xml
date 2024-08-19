@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>HaveCake</title>
+  
+  
+  <link href="http://example.com/atom.xml" rel="self"/>
+  
+  <link href="http://example.com/"/>
+  <updated>2024-06-17T04:50:48.576Z</updated>
+  <id>http://example.com/</id>
+  
+  <author>
+    <name>HaveCake</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>只抄书无创见</title>
+    <link href="http://example.com/2024/04/21/%E5%8F%AA%E6%8A%84%E4%B9%A6%E6%97%A0%E5%88%9B%E8%A7%81/"/>
+    <id>http://example.com/2024/04/21/%E5%8F%AA%E6%8A%84%E4%B9%A6%E6%97%A0%E5%88%9B%E8%A7%81/</id>
+    <published>2024-04-21T14:06:46.000Z</published>
+    <updated>2024-06-17T04:50:48.576Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;只抄书无创见&quot;&gt;&lt;a href=&quot;#只抄书无创见&quot; class=&quot;headerlink&quot; title=&quot;只抄书无创见&quot;&gt;&lt;/a&gt;只抄书无创见&lt;/h1&gt;&lt;p&gt;前些日子做了一篇阅读理解，是汪曾祺老先生的散文《闻一多先生上课》。这篇文章中提到西南联大的许多教授对学生鉴别的标准——不怕新，不怕怪，而不尚平庸，不喜欢人云亦云，只抄书，无创见。这给我留下了很深刻的印象，但一个问题也随之而来——只抄书无创见故然是错的吗？&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="个人写作" scheme="http://example.com/tags/%E4%B8%AA%E4%BA%BA%E5%86%99%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>探索未知：好奇心之外的驱动力</title>
+    <link href="http://example.com/2024/04/15/%E6%8E%A2%E7%B4%A2%E6%9C%AA%E7%9F%A5%EF%BC%9A%E5%A5%BD%E5%A5%87%E5%BF%83%E4%B9%8B%E5%A4%96%E7%9A%84%E9%A9%B1%E5%8A%A8%E5%8A%9B/"/>
+    <id>http://example.com/2024/04/15/%E6%8E%A2%E7%B4%A2%E6%9C%AA%E7%9F%A5%EF%BC%9A%E5%A5%BD%E5%A5%87%E5%BF%83%E4%B9%8B%E5%A4%96%E7%9A%84%E9%A9%B1%E5%8A%A8%E5%8A%9B/</id>
+    <published>2024-04-15T14:12:15.000Z</published>
+    <updated>2024-06-17T04:50:48.395Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;探索未知：好奇心之外的驱动力&quot;&gt;&lt;a href=&quot;#探索未知：好奇心之外的驱动力&quot; class=&quot;headerlink&quot; title=&quot;探索未知：好奇心之外的驱动力&quot;&gt;&lt;/a&gt;探索未知：好奇心之外的驱动力&lt;/h1&gt;&lt;p&gt;在人类历史的长河中，探索未知一直是推动社会进步的重要力量。从古至今，无数探险家、科学家、思想家都以探索未知为己任，他们的足迹遍布世界的每一个角落，他们的智慧照亮了人类文明的星空。然而，当我们深入思考这个问题时，不禁会问：一个人乐意去探索陌生世界，仅仅是因为好奇心吗？&lt;/p&gt;</summary>
+    
+    
+    
+    
+    <category term="AI创作" scheme="http://example.com/tags/AI%E5%88%9B%E4%BD%9C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>初来乍到</title>
+    <link href="http://example.com/2024/03/15/%E5%88%9D%E6%9D%A5%E4%B9%8D%E5%88%B0/"/>
+    <id>http://example.com/2024/03/15/%E5%88%9D%E6%9D%A5%E4%B9%8D%E5%88%B0/</id>
+    <published>2024-03-15T13:46:06.000Z</published>
+    <updated>2024-06-17T04:50:48.364Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;新的篇章：个人博客&quot;&gt;&lt;a href=&quot;#新的篇章：个人博客&quot; class=&quot;headerlink&quot; title=&quot;新的篇章：个人博客&quot;&gt;&lt;/a&gt;新的篇章：个人博客&lt;/h1&gt;&lt;h2 id=&quot;引言&quot;&gt;&lt;a href=&quot;#引言&quot; class=&quot;headerlink&quot; title=&quot;引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;&lt;p&gt;在这个数字化的时代，每个人都可以成为信息的传播者。今天，我迈出了重要的一步——创建了自己的博客。这不仅仅是一个展示自我的平台，更是一个分享知识、交流想法、记录成长的空间。&lt;/p&gt;</summary>
+    
+    
+    
+    
+  </entry>
+  
+</feed>
