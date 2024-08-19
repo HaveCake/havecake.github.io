@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+  <meta name="msvalidate.01" content="9CFBD1AB20E4F25DCDB5A38070990344">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":true,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="body {             overflow: hidden;             margin: 0;         }              &#x2F;&#x2F; 导入三维模型库     import * as THREE from &quot;https:&#x2F;&#x2F;cdn.skypack.dev&#x2F;three@0.136.0&quot;;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="HaveCake">
+<meta property="og:url" content="http://example.com/source/html/TheSky/index.html">
+<meta property="og:site_name" content="HaveCake">
+<meta property="og:description" content="body {             overflow: hidden;             margin: 0;         }              &#x2F;&#x2F; 导入三维模型库     import * as THREE from &quot;https:&#x2F;&#x2F;cdn.skypack.dev&#x2F;three@0.136.0&quot;;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-06-17T04:50:48.606Z">
+<meta property="article:modified_time" content="2024-06-17T04:50:48.606Z">
+<meta property="article:author" content="HaveCake">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/source/html/TheSky/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":true,"permalink":"http://example.com/source/html/TheSky/index.html","path":"source/html/TheSky/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | HaveCake
+</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">HaveCake</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-有趣的小程序（持续更新）"><a href="/App/" rel="section"><i class="fa fa-book fa-fw"></i>有趣的小程序（持续更新）</a></li><li class="menu-item menu-item-我的其他网站"><a href="/OtherWeb/" rel="section"><i class="fa fa-server fa-fw"></i>我的其他网站</a></li><li class="menu-item menu-item-sitemap"><a href="/sitemap.xml" rel="section"><i class="fa fa-sitemap fa-fw"></i>站点地图</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="HaveCake"
+      src="/images/avatar.png">
+  <p class="site-author-name" itemprop="name">HaveCake</p>
+  <div class="site-description" itemprop="description">print("love")</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/HaveCake" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;HaveCake" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:HaveCake@20110228.xyz" title="E-Mail → mailto:HaveCake@20110228.xyz" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/images/wechat_channel.png" title="Wechat → &#x2F;images&#x2F;wechat_channel.png" rel="noopener me"><i class="fab fa-weixin fa-fw"></i>Wechat</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="zh-CN"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+  <ul class="breadcrumb">
+            <li><a href="/source/">SOURCE</a></li>
+            <li><a href="/source/html/">HTML</a></li>
+          <li>THESKY</li>
+  </ul>
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title></title>
+    <style>
+        body {
+            overflow: hidden;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+<script type="module">
+    // 导入三维模型库
+    import * as THREE from "https://cdn.skypack.dev/three@0.136.0";
+    // 导入轨道控制库
+    import {
+        OrbitControls
+    } from "https://cdn.skypack.dev/three@0.136.0/examples/jsm/controls/OrbitControls";
+    // 清除控制台
+    console.clear()
+    // 创建场景
+    let scene = new THREE.Scene()
+    // 设置场景背景颜色
+    scene.background = new THREE.Color(0x160016)
+
+    // 创建相机
+    let camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 1, 1000)
+    // 设置相机位置
+    camera.position.set(0, 4, 27)
+
+    // 创建渲染器
+    let renderer = new THREE.WebGLRenderer()
+    // 设置渲染器大小
+    renderer.setSize(innerWidth, innerHeight)
+    // 把渲染器加入到页面中
+    document.body.appendChild(renderer.domElement)
+    // 监听窗口大小变化事件
+    window.addEventListener("resize", event => {
+        camera.aspect = innerWidth / innerHeight
+        camera.updateProjectionMatrix()
+        renderer.setSize(innerWidth, innerHeight)
+    })
+
+    // 创建控制器
+    let controls = new OrbitControls(camera, renderer.domElement)
+    // 开启阻尼效果
+    controls.enableDamping = true
+    // 禁用面板
+    controls.enablePan
+    // 创建全局uniform
+    let gu = {
+        time: {
+            value: 0
+        }
+    }
+    // 创建点的大小数组和移动数组
+    let sizes = []
+    let shift = []
+
+    // 创建移动函数
+    let pushShift = () => {
+        shift.push(
+            Math.random() * Math.PI,
+            Math.random() * Math.PI * 2,
+            (Math.random() * 0.9 + 0.1) * Math.PI * 0.1,
+            Math.random() * 0.9 + 0.1
+        )
+    }
+
+    // 创建点的顶点数组（中间的球体）
+    // 创建一个长度为5万的数组pts并y用Array.prototype.map()方法遍历数组并对每个元素进行操作
+    let pts = new Array(50000).fill().map(p => {
+        // 每次遍历中，会向sizes数组中添加一个随机大小
+        sizes.push(Math.random() * 1.5 + 0.5)
+        // 调用pushShift()函数添加位置信息，并返回一个随机方向的THREE.Vector对象
+        pushShift()
+        return new THREE.Vector3().randomDirection().multiplyScalar(Math.random() * 0.5 + 9.5)
+        //
+    })
+
+    // 添加更多的点（旁边围绕的）
+    // 先循环生成十万个点
+    // 每次循环中生成一个随机数rand，再生成一个随机半径radius
+
+    for (let i = 0; i < 100000; i++) {
+        let r = 10,
+            R = 40;
+        let rand = Math.pow(Math.random(), 1.5);
+        let radius = Math.sqrt(R * R * rand + (1 - rand) * r * r);
+        // 使用new THREE.Vector3().setFromCylindricalCoords()生成一个点。
+        pts.push(new THREE.Vector3().setFromCylindricalCoords(radius, Math.random() * 2 * Math.PI, (Math.random() - 0.5) * 2));
+        sizes.push(Math.random() * 1.5 + 0.5);
+        pushShift();
+    }
+    // 生成一个点g，同时将点的大小和位置信息添加到sizes和shift数组中
+    let g = new THREE.BufferGeometry().setFromPoints(pts)
+    // 创建了一个缓冲几何体并设置sizes和shift属性
+    // 注意这里的F要大写Float32BufferAttribute
+    g.setAttribute("sizes", new THREE.Float32BufferAttribute(sizes, 1))
+    g.setAttribute("shift", new THREE.Float32BufferAttribute(shift, 4))
+    // 创建点材质
+    let m = new THREE.PointsMaterial({
+        // 表示点的大小
+        size: 0.125,
+        // 设置材质为透明
+        transparent: true,
+        // 表示禁用深度测试，使点可以叠加
+        depthTest: false,
+        // 使用假发混合模式
+        blending: THREE.AdditiveBlending,
+        // 在材质编译之前修改颜色器，在这里，它用来替换顶点着色器和片元着色器，添加uniform
+        // 和attribute，以鸡自定义颜色和移动
+        onBeforeCompile: shader => {
+            shader.uniforms.time = gu.time
+            // 首先，它为着色器设置了一个uniform变量time，该变量是在点材质中定义的，用来追踪时间
+            // 然后它定义了两个attribute变量sizes和shift，这两个变量是在缓冲几何体中定义的，用来控制点的大小和移动
+            // 最后使用replace方法来替换顶点着色器中的代码
+            shader.vertexShader = `
+            uniform float time;
+            attribute float sizes;
+            attribute vec4 shift;
+            varying vec3 vColor;
+            ${shader.vertexShader}
+            `
+                // 注意上面的 ` 不要漏掉了
+                // 使用replace来替换着色器中的代码
+                // 更新点的大小
+                .replace(
+                    `gl_PointSize = size;`,
+                    `gl_PointSize = size * sizes;`
+                )
+                // 更新点的颜色
+                .replace(
+                    `#include <color_vertex>`,
+                    `#include <color_vertex>
+                float d = length(abs(position)/vec3(40.,10.,40));
+                d=clamp(d,0.,1.);
+                vColor = mix(vec3(227.,155.,0.),vec3(100.,50.,255.),d)/255.;`
+                )
+                // 记得加上分号
+                // 更新点的移动
+                .replace(
+                    `#include <begin_vertex>`,
+                    `#include <begin_vertex>
+                        float t = time;
+                        float moveT = mod(shift.x + shift.z * t,PI2);
+                        float moveS = mod(shift.y + shift.z * t,PI2);
+                        transformed += vec3(cos(moveS) * sin(moveT),cos(moveT),sin(moveS)*sin(moveT)) * shift.w;
+                        `
+                )
+            // 修改片元着色器，用来让点的边缘更加圆滑
+
+            // 首先，定义一个varying变量vColor，这个变量是在顶点着色器中定义的，用来传递点的颜色到片段着色器
+            // 然后使用replace方法来替换片段着色器的代码
+            shader.fragmentShader = `
+                varying vec3 vColor;
+                ${shader.fragmentShader}
+            `.replace(
+                `#include <clipping_planes_fragment>`,
+                `#include <clipping_planes_fragment>
+                    float d = length(gl_PointCoord.xy - 0.5);
+                `
+            ).replace(
+                // 记得加上空格
+                `vec4 diffuseColor = vec4( diffuse, opacity );`,
+                `vec4 diffuseColor = vec4( vColor, smoothstep(0.5, 0.1, d)/* * 0.5+0.5*/);`
+            );
+        }
+
+    })
+    // -------------------------------------------------------------
+    // 创建点云并将其添加到场景中，并设置渲染循环
+    let p = new THREE.Points(g, m)
+    // 旋转顺序为"ZYX"
+    p.rotation.order = "ZYX"
+    // 旋转角度 0.2
+    p.rotation.z = 0.2
+    // 把对象（p）添加到场景（scene）中
+    scene.add(p)
+    // 创建一个时钟对象clock
+    let clock = new THREE.Clock()
+    // 渲染循环，每次循环中会更新控制器，更新p的旋转角度，更新时间
+    renderer.setAnimationLoop(() => {
+        // 更新控制器
+        controls.update()
+        // 获取时钟对象（clock）的已经流逝的时间（t）并将他乘0.5
+        // 先把时钟关了
+        let t = clock.getElapsedTime() * 0.5
+        // 将gu.time.value 设置为t*Math.PI
+        gu.time.value = t * Math.PI
+        // 将对象（p）的旋转角度y设置为t*0.05
+        p.rotation.y = t * 0.05
+        // 渲染场景（scene）和相机（camera）
+        renderer.render(scene, camera)
+    })
+</script>
+</body>
+
+</html>
+      </div>
+      
+      
+      
+    </div>
+  <ul class="breadcrumb">
+            <li><a href="/source/">SOURCE</a></li>
+            <li><a href="/source/html/">HTML</a></li>
+          <li>THESKY</li>
+  </ul>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">HaveCake</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+  <a href="https://github.com/HaveCake" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
