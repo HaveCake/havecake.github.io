@@ -1,0 +1,813 @@
+<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>无影工厂</title>
+<style type="text/css">
+*{box-sizing:border-box;}
+body{margin:0;}
+button{padding:1px 3px;}
+details{display:block;}
+img,audio,video{border:1px solid #7F7F7F;display:inline-block;max-width:100%;}
+label{display:inline-block;}
+summary h3,summary h4{display:inline;}
+table{border-collapse:collapse;}
+table tr th,table tr td{border:1px solid #7f7f7f;padding:2px 5px;}
+ul{margin:0;padding-left:25px;}
+.breakWord{overflow-wrap:break-word;}
+.container{padding:10px 15px;}
+.declare{color:#ff3f3f;font-weight:bold;}
+.headerBar{background-color:#dfffff;height:45px;left:0;position:fixed;top:0;width:100%;}
+.headerBar button{height:25px;}
+.mLeftM{margin-left:15px;}
+.mRightXS{margin-right:5px;}
+.mTopS{margin-top:8px;}
+.mainPanel{margin-top:30px;}
+.noWrap{white-space:nowrap;word-break:keep-all;}
+.remark{color:#3f3f3f;font-family:'新宋体';font-size:0.8rem;}
+</style>
+<script type="text/javascript">
+const UT=(()=>{
+  const Excp=function(msg,cause){
+    this.msg=msg;
+    this.cause=cause;
+  };
+  const preProm=exec=>()=>new Promise(exec);
+  const serial=prePms=>async()=>{
+    let ret=[];
+    for(prePm of prePms){
+      ret.push(await prePm());
+    }
+    return ret;
+  };
+  const parallel=prePms=>()=>Promise.all(prePms.map(prePm=>prePm()));
+  const fcc=String.fromCharCode;
+  const utf8En=text=>{
+    let code='';
+    for(let i=0;i<text.length;i++){
+      const c=text.charCodeAt(i);
+      code+=c<0x80?fcc(c):c<0x800?(fcc((c>>>6)|0xC0)+fcc(c&0x3F|0x80)):(fcc((c>>>12)|0xE0)+fcc((c>>>6)&0x3F|0x80)+fcc(c&0x3F|0x80));
+    }
+    return code;
+  };
+  const utf8De=code=>{
+    let text='';
+    for(let i=0;i<code.length;i++){
+      const c=code.charCodeAt(i);
+      text+=c<0x80?fcc(c):c<0xE0?fcc(((c&0x1F)<<6)|(code.charCodeAt(++i)&0x3F)):fcc(((c&0x0F)<<12)|((code.charCodeAt(++i)&0x3F)<<6)|(code.charCodeAt(++i)&0x3F));
+    }
+    return text;
+  };
+  const url2Blob=url=>{
+    const frag=url.split(',');
+    const mime=frag[0].match(/:(.*?);/)[1];
+    const bytes=atob(frag[1]);
+    let l=bytes.length;
+    const arr=new Uint8Array(l);
+    while(l--){
+      arr[l]=bytes.charCodeAt(l);
+    }
+    return new Blob([arr.buffer],{type:mime});
+  };
+  const loadFile=(load,emsg)=>preProm((ok,err)=>{
+    try{
+      const r=new FileReader();
+      r.onloadend=e=>{
+        if(e.target.error){
+          err(new Excp(emsg,e.target.error));
+        }else{
+          ok(e.target.result);
+        }
+      };
+      load(r);
+    }catch(t){
+      err(new Excp(emsg,t));
+    }
+  });
+  const loadAsUrl=(file,emsg)=>loadFile(r=>r.readAsDataURL(file),emsg);
+  const loadAsBuff=(file,emsg)=>loadFile(r=>r.readAsArrayBuffer(file),emsg);
+  return {
+    Excp:Excp,
+    preProm:preProm,
+    serial:serial,
+    parallel:parallel,
+    fcc:fcc,
+    utf8En:utf8En,
+    utf8De:utf8De,
+    url2Blob:url2Blob,
+    loadFile:loadFile,
+    loadAsUrl:loadAsUrl,
+    loadAsBuff:loadAsBuff
+  };
+})();
+
+const CF=(()=>{
+  const F0=0,F1=3,FLV=3,IDLI=UT.fcc(1),IEND=UT.fcc(0);
+  const ERR={
+    CLOAK_FAIL:'CLOAK_FAIL',
+    DECLOAK_FAIL:'DECLOAK_FAIL',
+    DECLOAK_CROSS_ORIGIN_ERR:'DECLOAK_CROSS_ORIGIN_ERR',
+    INFILE_INVLD:'INFILE_INVLD'
+  };
+  const genAux=lv=>({
+    range:1<<lv,
+    half:(1<<lv)>>>1,
+    maskH:-1<<lv,
+    maskL:~(-1<<lv)
+  });
+  const abut=(b,t,aux)=>{
+    if(aux.range<=2){
+      return b&aux.maskH|t;
+    }
+    const bL=b&aux.maskL;
+    return (b<aux.half||b>=0xFF-aux.half)?(b&aux.maskH|t):(t-bL>aux.half)?((b&aux.maskH|t)-aux.range):(bL-t>=aux.half)?((b&aux.maskH|t)+aux.range):(b&aux.maskH|t);
+  };
+  const Pkg=function(data,lv,clk){
+    this.data=data;
+    this.lv=lv;
+    this.buff=0;
+    this.bits=0;
+    this.idx=4;
+    this.aux=genAux(lv);
+    this.clk=clk;
+  };
+  Pkg.prototype.implantSeg=function(next){
+    if(!this.clk){
+      return;
+    }
+    let i=0;
+    while(this.idx<this.data.length){
+      const b=next(i++);
+      if(b<0){
+        break;
+      }
+      this.buff=(this.buff<<8)|b;
+      this.bits+=8;
+      this.flush();
+    }
+  };
+  Pkg.prototype.flush=function(end){
+    if(!this.clk){
+      return;
+    }
+    while(this.idx<this.data.length&&this.bits>=this.lv){
+      this.data[this.idx]=abut(this.data[this.idx],(this.buff>>>(this.bits-this.lv))&this.aux.maskL,this.aux);
+      this.bits-=this.lv;
+      this.idx++;
+      if((this.idx&3)===3){
+        this.idx++;
+      }
+    }
+    if(end&&this.idx<this.data.length&&this.bits>0){
+      this.data[this.idx]=abut(this.data[this.idx],(this.buff<<(this.lv-this.bits))&this.aux.maskL,this.aux);
+      this.idx++;
+    }
+  };
+  Pkg.prototype.extractBytes=function(onByte){
+    if(this.clk){
+      return;
+    }
+    let i=0,goon=true;
+    while(this.idx<this.data.length&&goon){
+      this.buff=(this.buff<<this.lv)|(this.data[this.idx]&this.aux.maskL);
+      this.bits+=this.lv;
+      this.idx++;
+      if((this.idx&3)===3){
+        this.idx++;
+      }
+      if(this.bits>=8){
+        goon=onByte((this.buff>>>(this.bits-8))&0xFF)!==false;
+        this.bits-=8;
+      }
+    }
+  };
+  const adjMinSize=(imgW,imgH,minW,minH)=>{
+    const h=Math.round(minW*imgH/imgW);
+    if(h<minH){
+      minW=Math.max(minW,Math.round(minH*imgW/imgH));
+    }else{
+      minH=h;
+    }
+    return [minW,minH];
+  };
+  const calcSizeLv=(bits,maxLv,imgW,imgH,minW,minH,shrink)=>{
+    const minSize=adjMinSize(imgW,imgH,minW,minH);
+    minW=minSize[0];
+    minH=minSize[1];
+    const noShk=shrink!=='TEMPERATE'&&shrink!=='EXTREME';
+    if(noShk){
+      minW=Math.max(imgW,minW);
+      minH=Math.max(imgH,minH);
+    }
+    const imgPx=imgW*imgH,minPx=minW*minH;
+    let lv=0,needPx=0;
+    do{
+      lv++;
+      needPx=Math.ceil(bits/(lv*3))+1;
+    }while(lv<maxLv&&needPx>minPx&&(needPx>imgPx||shrink==='EXTREME'));
+    let w=imgW,h=imgH;
+    if(needPx<=minPx){
+      w=minW;
+      h=minH;
+    }else if(needPx>imgPx||(!noShk&&needPx<imgPx)){
+      const scale=Math.sqrt(needPx/imgPx);
+      w=Math.ceil(scale*w);
+      h=Math.ceil(scale*h);
+    }
+    return [w,h,lv];
+  };
+  const implant=(outImg,inData,info,lv)=>{
+    const faux=genAux(FLV);
+    const outData=outImg.data;
+    outData[0]=abut(outData[0],F0,faux);
+    outData[1]=abut(outData[1],F1,faux);
+    outData[2]=abut(outData[2],lv,faux);
+    const pkg=new Pkg(outData,lv,true);
+    pkg.implantSeg(i=>i<info.length?info.charCodeAt(i):-1);
+    pkg.implantSeg(i=>i<inData.length?inData[i]:-1);
+    pkg.flush(true);
+    const cvs=document.createElement("canvas");
+    cvs.width=outImg.width;
+    cvs.height=outImg.height;
+    const ctx=cvs.getContext("2d");
+    ctx.putImageData(outImg,0,0);
+    return cvs.toDataURL();
+  };
+  const extract=data=>{
+    const fmaskL=~(-1<<FLV);
+    const f0=data[0]&fmaskL;
+    const f1=data[1]&fmaskL;
+    const lv=data[2]&fmaskL;
+    if(f0!==F0||f1!==F1||lv<1||lv>5){
+      throw new UT.Excp(ERR.INFILE_INVLD,new Error());
+    }
+    const pkg=new Pkg(data,lv,false);
+    let info='';
+    pkg.extractBytes(b=>{
+      const c=UT.fcc(b);
+      if(c===IEND){
+        return false;
+      }
+      info+=c;
+    });
+    const frag=info.split(IDLI);
+    if(frag.length!==3){
+      throw new UT.Excp(ERR.INFILE_INVLD,new Error());
+    }
+    const len=parseInt(frag[0]);
+    if(len<0){
+      throw new UT.Excp(ERR.INFILE_INVLD,new Error());
+    }
+    const arr=new Uint8Array(len);
+    let i=0;
+    pkg.extractBytes(b=>{
+      if(i>=len){
+        return false;
+      }
+      arr[i++]=b;
+    });
+    return new File([arr.buffer],UT.utf8De(frag[1]),{type:frag[2]});
+  };
+  const cloak=para=>UT.preProm((ok,err)=>{
+    try{
+      const inData=new Uint8Array(para.inBuff);
+      const info=inData.length+IDLI+UT.utf8En(para.inName)+IDLI+para.inType+IEND;
+      const outImg=new Image();
+      outImg.onload=()=>{
+        try{
+          const sizeLv=calcSizeLv((info.length+inData.length)*8,para.maxLv,outImg.width,outImg.height,para.minWidth,para.minHeight,para.shrink);
+          const cvs=document.createElement("canvas");
+          cvs.width=sizeLv[0];
+          cvs.height=sizeLv[1];
+          const ctx=cvs.getContext("2d");
+          ctx.fillStyle="#ffffff";
+          ctx.fillRect(0,0,sizeLv[0],sizeLv[1]);
+          ctx.drawImage(outImg,0,0,sizeLv[0],sizeLv[1]);
+          if(para.remark){
+            ctx.font="16px Arial";
+            ctx.textBaseline="middle";
+            ctx.fillStyle="rgba(255,255,255,0.75)";
+            ctx.fillRect(0,0,ctx.measureText(para.remark).width+8,28);
+            ctx.fillStyle="#000000";
+            ctx.fillText(para.remark,4,14,sizeLv[0]-8);
+          }
+          const blob=UT.url2Blob(implant(ctx.getImageData(0,0,sizeLv[0],sizeLv[1]),inData,info,sizeLv[2]));
+          ok(new File([blob],para.outName,{type:blob.type}));
+        }catch(t){
+          err((t instanceof UT.Excp)?t:new UT.Excp(ERR.CLOAK_FAIL,t));
+        }
+      };
+      outImg.onerror=e=>err(new UT.Excp(ERR.CLOAK_FAIL,e));
+      outImg.src=para.outUrl;
+    }catch(t){
+      err((t instanceof UT.Excp)?t:new UT.Excp(ERR.CLOAK_FAIL,t));
+    }
+  });
+  const decloak=url=>UT.preProm((ok,err)=>{
+    try{
+      const img=new Image();
+      img.crossOrigin='Anonymous';
+      img.onload=()=>{
+        try{
+          const cvs=document.createElement("canvas");
+          cvs.width=img.width;
+          cvs.height=img.height;
+          const ctx=cvs.getContext("2d");
+          ctx.drawImage(img,0,0);
+          ok(extract(ctx.getImageData(0,0,img.width,img.height).data));
+        }catch(t){
+          err((t instanceof UT.Excp)?t:new UT.Excp(t.message&&t.message.toLowerCase().indexOf('cross-origin')>=0?ERR.DECLOAK_CROSS_ORIGIN_ERR:ERR.DECLOAK_FAIL,t));
+        }
+      };
+      img.onerror=e=>err(new UT.Excp(ERR.DECLOAK_FAIL,e));
+      img.src=url;
+    }catch(t){
+      err((t instanceof UT.Excp)?t:new UT.Excp(ERR.DECLOAK_FAIL,t));
+    }
+  });
+  return {
+    ERR:ERR,
+    cloak:cloak,
+    decloak:decloak
+  };
+})();
+</script>
+</head>
+<body>
+<div class="container headerBar">
+  <button id="allFold" type="button">全部折叠</button>
+  <button id="allCloak" type="button">全部无影</button>
+  <button id="allDecloak" type="button">全部现形</button>
+</div>
+<div class="container mainPanel">
+  <h2>无影工厂<span id="ver"></span><span class="mLeftM remark">by: Use MiniCD</span></h2>
+  <div><span class="declare">免责声明：本工具仅用于学习研究目的，任何使用本工具造成的影响与后果均由使用者全权负责！</span></div>
+  <details id="cloakSec" class="mTopS">
+    <summary><h4 id="clkTitle">无影坦克创建</h4></summary>
+    <form id="clkForm">
+      <input id="clkOut" type="file" accept="image/*" style="display:none;">
+      <input id="clkIn" type="file" style="display:none;">
+      <button id="clkOutBtn" type="button" class="mTopS">选择表图</button><label id="clkOutLbl" for="clkOutBtn" class="mLeftM remark"></label><br>
+      <button id="clkInBtn" type="button" class="mTopS">选择里文件</button><label id="clkInLbl" for="clkInBtn" class="mLeftM remark"></label><br>
+      <label for="clkAddRemark" class="mTopS">添加备注</label><input id="clkAddRemark" type="checkbox" checked="checked"><br>
+      <input id="clkRemark" type="text" style="width:150px;" value="Cloak" maxlength="30" disabled="disabled"><br>
+      <fieldset class="mTopS">
+        <legend>压缩选项</legend>
+        <label for="clkMaxLv" class="mRightXS">最大压缩度</label>
+        <select id="clkMaxLv">
+          <option value="0">1</option>
+          <option value="1">2</option>
+          <option value="2">3</option>
+          <option value="3" selected="selected">4</option>
+          <option value="4">5</option>
+        </select><br>
+        <span>(建议里文件小于<span id="clkSuggestSize"></span>)</span><br>
+        <label class="mTopS">最小尺寸</label><br>
+        <label class="mRightXS" for="clkMinWidth">宽</label><input id="clkMinWidth" type="number" value="120" min="1" max="9999" style="width:60px;"><label class="mLeftM mRightXS" for="clkMinHeight">高</label><input id="clkMinHeight" type="number" value="120" min="1" max="9999" style="width:60px;"><br>
+        <label class="mTopS" for="clkShrink">尺寸缩小策略</label><br>
+        <select id="clkShrink">
+          <option value="">不缩小</option>
+          <option value="TEMPERATE" selected="selected">不增大压缩度的缩小</option>
+          <option value="EXTREME">尽量缩小</option>
+        </select>
+      </fieldset>
+      <button id="clkReset" type="button" class="mTopS">重置</button><button id="clkGo" type="button" class="mTopS mLeftM">创建</button><br>
+      <div id="clkResultBar" class="breakWord mTopS" style="display:none;">
+        <a id="clkSave" href="javascript:;">保存坦克</a><a id="clkToggle" class="mLeftM" href="javascript:;">切换</a><span id="clkInfo" class="mLeftM"></span>
+      </div>
+      <div id="clkResult" class="mTopS"></div>
+    </form>
+  </details>
+  <details id="decloakSec" class="mTopS">
+    <summary><h4 id="dclTitle">无影坦克现形</h4></summary>
+    <form id="dclForm">
+      <input id="dclImgs" type="file" accept="image/*" multiple="multiple" style="display:none;">
+      <button id="dclReset" type="button" class="mTopS">重置</button><br>
+      <button id="dclImgsBtn" type="button" class="mTopS">现形本地坦克</button><label id="dclImgsLbl" for="dclImgsBtn" class="mLeftM remark"></label><br>
+      <button id="dclNetGo" type="button" class="mTopS">现形网络坦克</button><label class="mTopS mLeftM" for="dclNetUrl">坦克图网址(每个一行):</label><br>
+      <textarea id="dclNetUrl" class="mTopS" rows="8" style="width:100%;"></textarea>
+      <div id="dclStatus" class="mTopS" style="display:none;"></div>
+      <div id="dclResults" class="mTopS" style="display:none;"></div>
+    </form>
+  </details>
+  <h3>说明</h3>
+  <ul>
+    <li>无影工厂支持任意格式里文件。</li>
+    <li>坦克现形支持批量现形，可一次选择多个坦克进行现形。</li>
+    <li>对里文件是图片、音频、视频等媒体文件的情况，现形后可直接在页面上查看播放相关媒体内容，对其它格式文件可以保存到本地后查看。</li>
+    <li>按钮或标签后[]内字符为快捷键。</li>
+  </ul>
+  <div class="mTopS"><a id="downSelf" href="javascript:;" download="cloak_factory.html">保存无影工厂</a> (保存的html文件可使用支持HTML5的浏览器打开)</div>
+  <table id="verHis" class="mTopS remark">
+    <thead>
+      <tr><th>版本</th><th>日期</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="noWrap">1.0</td><td class="noWrap">2021-03-18</td><td>初始创建，基于ybzjdsd的无影坦克II。<br>添加全部折叠功能。<br>添加快捷键支持。</td></tr>
+      <tr><td class="noWrap">2.0</td><td class="noWrap">2021-03-18</td><td>添加批量现形功能。<br>添加切换表里图功能。</td></tr>
+      <tr><td class="noWrap">3.0</td><td class="noWrap">2021-03-19</td><td>改进算法，重构代码。<br>支持任意格式里文件。<br>现形可显示媒体文件(图片，音频，视频)。</td></tr>
+      <tr><td class="noWrap">3.1</td><td class="noWrap">2021-03-19</td><td>优化创建坦克功能，改进压缩选项。</td></tr>
+      <tr><td class="noWrap">3.2</td><td class="noWrap">2021-03-19</td><td>添加重置功能。</td></tr>
+      <tr><td class="noWrap">3.3</td><td class="noWrap">2021-03-19</td><td>最大压缩度支持到5级。</td></tr>
+      <tr><td class="noWrap">3.4</td><td class="noWrap">2021-03-24</td><td>添加网络坦克现形支持。</td></tr>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript">
+window.onload=()=>{
+
+const selfHtml='<!DOCTYPE '+'html>'+document.documentElement.outerHTML;
+const META={
+  clk:{
+    suggestSizes:['400K','800K','1.5M','3M'],
+    warnSizeUnit:20*1024*1024,
+    downloadName:'cloak.png'
+  },
+  dcl:{
+    warnCnt:100
+  },
+  errs:{}
+};
+META.errs[CF.ERR.CLOAK_FAIL]='创建失败.';
+META.errs[CF.ERR.DECLOAK_FAIL]='现形失败.';
+META.errs[CF.ERR.DECLOAK_CROSS_ORIGIN_ERR]='现形失败. (图片所在服务器禁止跨域访问，请下载图片后再现形)';
+META.errs[CF.ERR.INFILE_INVLD]='里文件数据有误.';
+const CACHE={};
+
+const dAllFold=document.getElementById('allFold');
+const dAllCloak=document.getElementById('allCloak');
+const dAllDecloak=document.getElementById('allDecloak');
+const dVer=document.getElementById('ver');
+const dVerHis=document.getElementById('verHis');
+const dSections=document.getElementsByTagName('details');
+const dCloakSec=document.getElementById('cloakSec');
+const dDecloakSec=document.getElementById('decloakSec');
+const dClkTitle=document.getElementById('clkTitle');
+const dDclTitle=document.getElementById('dclTitle');
+const dDownSelf=document.getElementById('downSelf');
+
+const dClkForm=document.getElementById('clkForm');
+const dClkOut=document.getElementById('clkOut');
+const dClkIn=document.getElementById('clkIn');
+const dClkOutBtn=document.getElementById('clkOutBtn');
+const dClkOutLbl=document.getElementById('clkOutLbl');
+const dClkInBtn=document.getElementById('clkInBtn');
+const dClkInLbl=document.getElementById('clkInLbl');
+const dClkAddRemark=document.getElementById('clkAddRemark');
+const dClkRemark=document.getElementById('clkRemark');
+const dClkMaxLv=document.getElementById('clkMaxLv');
+const dClkSuggestSize=document.getElementById('clkSuggestSize');
+const dClkMinWidth=document.getElementById('clkMinWidth');
+const dClkMinHeight=document.getElementById('clkMinHeight');
+const dClkShrink=document.getElementById('clkShrink');
+const dClkReset=document.getElementById('clkReset');
+const dClkGo=document.getElementById('clkGo');
+const dClkResultBar=document.getElementById('clkResultBar');
+const dClkSave=document.getElementById('clkSave');
+const dClkToggle=document.getElementById('clkToggle');
+const dClkInfo=document.getElementById('clkInfo');
+const dClkResult=document.getElementById('clkResult');
+
+const dDclForm=document.getElementById('dclForm');
+const dDclImgs=document.getElementById('dclImgs');
+const dDclReset=document.getElementById('dclReset');
+const dDclImgsBtn=document.getElementById('dclImgsBtn');
+const dDclImgsLbl=document.getElementById('dclImgsLbl');
+const dDclNetGo=document.getElementById('dclNetGo');
+const dDclNetUrl=document.getElementById('dclNetUrl');
+const dDclStatus=document.getElementById('dclStatus');
+const dDclResults=document.getElementById('dclResults');
+
+const busyDoms=[dAllCloak,dAllDecloak,dClkOut,dClkIn,dClkOutBtn,dClkInBtn,dClkAddRemark,dClkRemark,dClkMaxLv,dClkMinWidth,dClkMinHeight,dClkShrink,dClkGo,dDclImgs,dDclImgsBtn,dDclNetGo,dDclNetUrl];
+
+const setText=(dom,text)=>{
+  dom.innerHTML="";
+  text&&dom.appendChild(document.createTextNode(text));
+};
+const toggleDomsSts=(doms,enable)=>doms.forEach(dom=>dom.disabled=!enable);
+const toggleSec=sec=>sec.open=!sec.open;
+const buildCache=(cloakName,cloakUrl,inName,inType,inUrl,cloak)=>({
+  cloakName:cloakName,
+  cloakUrl:cloakUrl,
+  inName:inName,
+  inType:inType,
+  inUrl:inUrl,
+  cloak:cloak
+});
+const toggleCloak=(cache,resultBox,resultInfo,hint)=>{
+  if(cache){
+    cache.cloak=!cache.cloak;
+    resultBox.innerHTML='';
+    if(cache.cloak){
+      setText(resultInfo,'坦克: '+cache.cloakName);
+      const img=new Image();
+      img.alt=hint;
+      img.src=cache.cloakUrl;
+      resultBox.appendChild(img);
+    }else{
+      setText(resultInfo,'里文件: '+cache.inName);
+      let inDom=null;
+      switch(cache.inType.split('/')[0].toLowerCase()){
+        case 'image':
+          inDom=document.createElement('img');
+          inDom.alt=hint;
+          break;
+        case 'audio':
+          inDom=document.createElement('audio');
+          inDom.controls=true;
+          break;
+        case 'video':
+          inDom=document.createElement('video');
+          inDom.controls=true;
+          break;
+        default:
+          inDom=document.createElement('img');
+          inDom.alt=hint+' (非媒体文件)';
+      }
+      inDom.src=cache.inUrl;
+      resultBox.appendChild(inDom);
+    }
+  }
+};
+const toggleBusy=busy=>{
+  toggleDomsSts(busyDoms,!busy);
+  busy||clkUpdRemarkSts();
+};
+const updIptFileLbl=(lblDom,fileDom)=>setText(lblDom,fileDom.files.length<=0?'':fileDom.files.length===1?fileDom.files[0].name:fileDom.files.length+'个文件');
+
+const clkUpdRemarkSts=()=>dClkRemark.disabled=!dClkAddRemark.checked;
+const clkUpdSuggestSize=()=>setText(dClkSuggestSize,META.clk.suggestSizes[parseInt(dClkMaxLv.value)]);
+const clkToggleCloak=()=>toggleCloak(CACHE.clk,dClkResult,dClkInfo,'创建完成');
+const clkClearCache=()=>{
+  CACHE.clk&&CACHE.clk.cloakUrl&&URL.revokeObjectURL(CACHE.clk.cloakUrl);
+  delete CACHE.clk;
+};
+const clkReset=()=>{
+  clkClearCache();
+  dClkForm.reset();
+  updIptFileLbl(dClkOutLbl,dClkOut);
+  updIptFileLbl(dClkInLbl,dClkIn);
+  clkUpdRemarkSts();
+  clkUpdSuggestSize();
+  dClkSave.href='javascript:;';
+  dClkSave.removeAttribute('download');
+  setText(dClkInfo,'');
+  dClkResult.innerHTML='';
+  dClkResultBar.style.display='none';
+};
+const clkGo=()=>{
+  const outFile=dClkOut.files[0];
+  const inFile=dClkIn.files[0];
+  const outEmsg='表图读取失败.';
+  const inEmsg='里文件读取失败.';
+  const maxLv=parseInt(dClkMaxLv.value)+1;
+  const minWidth=parseInt(dClkMinWidth.value);
+  const minHeight=parseInt(dClkMinHeight.value);
+  if(minWidth<dClkMinWidth.min||minWidth>dClkMinWidth.max){
+    alert('最小宽度必须在'+dClkMinWidth.min+'到'+dClkMinWidth.max+'之间.');
+    return;
+  }
+  if(minHeight<dClkMinHeight.min||minHeight>dClkMinHeight.max){
+    alert('最小高度必须在'+dClkMinHeight.min+'到'+dClkMinHeight.max+'之间.');
+    return;
+  }
+  const warnSize=META.clk.warnSizeUnit*maxLv;
+  if(inFile&&inFile.size>warnSize){
+    const warnMsg=Math.floor(warnSize/(1024*1024))+'MB';
+    if(!confirm('你选择的里文件大小超过'+warnMsg+'，在当前最大压缩度下生成的坦克图片尺寸将过大，可能会生成失败并造成页面崩溃，确定继续吗？')){
+      dClkIn.value='';
+      return;
+    }
+  }
+  toggleBusy(true);
+  setTimeout(()=>UT.parallel([
+    UT.loadAsUrl(outFile,outEmsg),
+    UT.loadAsBuff(inFile,inEmsg)
+  ])().then(loadResults=>UT.parallel([
+    CF.cloak({
+      outUrl:loadResults[0],
+      inBuff:loadResults[1],
+      outName:META.clk.downloadName,
+      inName:inFile.name,
+      inType:inFile.type,
+      remark:dClkAddRemark.checked?dClkRemark.value:null,
+      maxLv:maxLv,
+      minWidth:minWidth,
+      minHeight:minHeight,
+      shrink:dClkShrink.value
+    }),
+    UT.loadAsUrl(inFile,inEmsg)
+  ])()).then(clkResults=>{
+    try{
+      clkClearCache();
+      CACHE.clk=buildCache(clkResults[0].name,URL.createObjectURL(clkResults[0]),inFile.name,inFile.type,clkResults[1],false);
+      dClkSave.href=CACHE.clk.cloakUrl;
+      dClkSave.download=clkResults[0].name;
+      dClkResultBar.style.display='block';
+      clkToggleCloak();
+      return Promise.resolve();
+    }catch(t){
+      return Promise.reject(new UT.Excp(CF.ERR.CLOAK_FAIL,t));
+    }
+  }).catch(e=>{
+    console.error(e);
+    alert(META.errs[e.msg]||e.msg);
+  }).finally(()=>{
+    toggleBusy(false);
+  }),0);
+};
+dClkOutBtn.onclick=()=>dClkOut.click();
+dClkInBtn.onclick=()=>dClkIn.click();
+dClkOut.onchange=()=>updIptFileLbl(dClkOutLbl,dClkOut);
+dClkIn.onchange=()=>updIptFileLbl(dClkInLbl,dClkIn);
+dClkAddRemark.onchange=clkUpdRemarkSts;
+dClkMaxLv.onchange=clkUpdSuggestSize;
+dClkReset.onclick=clkReset;
+dClkGo.onclick=clkGo;
+dClkToggle.onclick=clkToggleCloak;
+clkReset();
+
+const dclUpdSts=()=>{
+  if(CACHE.dcl){
+    const total=CACHE.dcl.files.length;
+    const done=CACHE.dcl.done;
+    setText(dDclStatus,(done===total?'现形完毕.':'现形中...')+' ('+done+'/'+total+')');
+  }else{
+    setText(dDclStatus,'');
+  }
+};
+const dclToggleCloak=i=>CACHE.dcl&&toggleCloak(CACHE.dcl.files[i],document.getElementById('dclResult'+i),document.getElementById('dclInfo'+i),'现形完成');
+const dclClearCache=()=>{
+  CACHE.dcl&&CACHE.dcl.files&&CACHE.dcl.files.forEach(file=>URL.revokeObjectURL(file.inUrl));
+  delete CACHE.dcl;
+};
+const dclReset=()=>{
+  dclClearCache();
+  dDclForm.reset();
+  updIptFileLbl(dDclImgsLbl,dDclImgs);
+  dclUpdSts();
+  dDclStatus.style.display='none';
+  dDclResults.innerHTML='';
+  dDclResults.style.display='none';
+};
+const dclViewer=(item,i,nameUrlGetter)=>UT.preProm(ok=>setTimeout(()=>{
+  nameUrlGetter(item)().then(nameUrl=>UT.parallel([
+    ()=>Promise.resolve(nameUrl[0]),
+    ()=>Promise.resolve(nameUrl[1]),
+    CF.decloak(nameUrl[1])
+  ])()).then(dclResults=>{
+    try{
+      CACHE.dcl.files[i]=buildCache(dclResults[0],dclResults[1],dclResults[2].name,dclResults[2].type,URL.createObjectURL(dclResults[2]),true);
+      const dDclSave=document.getElementById('dclSave'+i);
+      dDclSave.href=CACHE.dcl.files[i].inUrl;
+      dDclSave.download=CACHE.dcl.files[i].inName;
+      const dDclToggle=document.getElementById('dclToggle'+i);
+      if(!dDclToggle.onclick){
+        dDclToggle.onclick=()=>dclToggleCloak(i);
+      }
+      document.getElementById('dclResultBar'+i).style.display='block';
+      dclToggleCloak(i);
+      return Promise.resolve();
+    }catch(t){
+      return Promise.reject(new UT.Excp(CF.ERR.DECLOAK_FAIL,t));
+    }
+  }).catch(e=>{
+    console.error(e);
+    setText(document.getElementById('dclResult'+i),META.errs[e.msg]||e.msg);
+  }).finally(()=>{
+    CACHE.dcl.done++;
+    dclUpdSts();
+    ok();
+  });
+},0));
+const dclGo=(items,viewer)=>{
+  const cnt=items.length;
+  let goon=cnt>0;
+  if(cnt>=META.dcl.warnCnt){
+    goon=window.confirm('你一次打开了超过'+META.dcl.warnCnt+'张图片，将占用较多内存并且可能造成页面崩溃，确定继续吗？');
+  }
+  if(!goon){
+    dDclImgs.value='';
+    return;
+  }
+  toggleBusy(true);
+  dclClearCache();
+  CACHE.dcl={
+    files:new Array(cnt),
+    done:0
+  };
+  dclUpdSts();
+  dDclStatus.style.display='block';
+  dDclResults.innerHTML='';
+  dDclResults.style.display='block';
+  const queue=[];
+  for(let i=0;i<cnt;i++){
+    const v=viewer(items[i],i);
+    const box=document.createElement('div');
+    box.className='mTopS';
+    box.innerHTML='<hr/><div id="dclResultBar'+i+'" class="breakWord" style="display:none;">'
+      +'<a id="dclSave'+i+'" href="javascript:;">保存里文件</a><a id="dclToggle'+i+'" class="mLeftM" href="javascript:;">切换</a><span id="dclInfo'+i+'" class="mLeftM"></span>'
+      +'</div>'
+      +'<div id="dclResult'+i+'"/>坦克现形中...</div>';
+    dDclResults.appendChild(box);
+    queue.push(v);
+  }
+  UT.serial(queue)().finally(()=>toggleBusy(false));
+};
+const dclLocalGo=()=>{
+  updIptFileLbl(dDclImgsLbl,dDclImgs);
+  const files=dDclImgs.files;
+  dclGo(files,(file,i)=>dclViewer(file,i,f=>UT.parallel([
+    ()=>Promise.resolve(f.name),
+    UT.loadAsUrl(f,'坦克读取失败.')
+  ])));
+};
+const dclNetGo=()=>{
+  const netUrlStr=dDclNetUrl.value;
+  if(!netUrlStr){
+    return;
+  }
+  const netUrls=netUrlStr.split('\n').filter(url=>!!url);
+  dclGo(netUrls,(url,i)=>dclViewer(url,i,u=>{
+    const lastSlashIdx=u.lastIndexOf('/');
+    let name=lastSlashIdx>=0?u.substring(lastSlashIdx+1):u;
+    name=name||u;
+    return ()=>Promise.resolve([name,u]);
+  }));
+};
+dDclReset.onclick=dclReset;
+dDclImgsBtn.onclick=()=>dDclImgs.click();
+dDclImgs.onchange=dclLocalGo;
+dDclNetGo.onclick=dclNetGo;
+dclReset();
+
+const foldAll=()=>{
+  for(let i=0;i<dSections.length;i++){
+    dSections[i].open=false;
+  }
+};
+const allToggle=clk=>{
+  const queue=[];
+  if(CACHE.clk&&CACHE.clk.cloak!==clk){
+    queue.push(UT.preProm(ok=>setTimeout(()=>{
+      clkToggleCloak();
+      ok();
+    },0)));
+  }
+  if(CACHE.dcl&&CACHE.dcl.files){
+    CACHE.dcl.files.forEach((file,i)=>{
+      if(file&&file.cloak!==clk){
+        queue.push(UT.preProm(ok=>setTimeout(()=>{
+          dclToggleCloak(i);
+          ok();
+        },0)));
+      }
+    });
+  }
+  if(queue.length>0){
+    toggleBusy(true);
+    UT.serial(queue)().finally(()=>toggleBusy(false));
+  }
+};
+const updVer=()=>{
+  const ver=dVerHis.querySelectorAll('tbody>tr:last-child>td:first-child')[0].innerHTML;
+  document.title+=ver;
+  setText(dVer,ver);
+};
+dAllFold.onclick=foldAll;
+dAllCloak.onclick=()=>allToggle(true);
+dAllDecloak.onclick=()=>allToggle(false);
+updVer();
+dDownSelf.href=URL.createObjectURL(new Blob([selfHtml],{type:"text/html"}));
+
+const hotKeyMap={};
+const regHotKey=(key,dom,cbk)=>{
+  hotKeyMap[key.charCodeAt(0)]=cbk;
+  setText(dom,dom.innerHTML+'['+key.charAt(0)+']');
+};
+const applyHotKey=()=>{
+  document.addEventListener('keypress',e=>{
+    console.log(e.keyCode);
+    const handler=hotKeyMap[e.keyCode];
+    handler&&handler();
+  });
+};
+const stopHotKey=e=>e.stopPropagation();
+const stopHotKeyOnDoms=doms=>doms.forEach(dom=>dom.addEventListener('keypress',stopHotKey));
+regHotKey('f',dAllFold,()=>dAllFold.click());
+regHotKey('c',dAllCloak,()=>dAllCloak.click());
+regHotKey('d',dAllDecloak,()=>dAllDecloak.click());
+regHotKey('1',dClkTitle,()=>toggleSec(dCloakSec));
+regHotKey('2',dDclTitle,()=>toggleSec(dDecloakSec));
+regHotKey('o',dClkOutBtn,()=>dClkOutBtn.click());
+regHotKey('i',dClkInBtn,()=>dClkInBtn.click());
+regHotKey('m',dClkGo,()=>dClkGo.click());
+regHotKey('s',dDclImgsBtn,()=>dDclImgsBtn.click());
+regHotKey('a',dDclNetGo,()=>dDclNetGo.click());
+applyHotKey();
+stopHotKeyOnDoms([dClkRemark,dClkMaxLv,dClkMinWidth,dClkMinHeight,dClkShrink,dDclNetUrl]);
+
+};
+</script>
+
+
+</body></html>

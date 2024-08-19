@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>目录</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1 {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #6132A4;
+            color: white;
+            margin-bottom: 0;
+        }
+        nav {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 15px;
+            margin-top: 0;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        li {
+            margin: 10px 0;
+        }
+        a {
+            text-decoration: none;
+            color: #6132A4;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        a:hover {
+            color: #4a2678; /* 更改悬浮时的颜色 */
+        }
+    </style>
+</head>
+<body>
+    <h1>欢迎来到目录</h1>
+    <nav>
+        <ul>
+            <li><a href="Picture_confusion.html" target="_blank">图片混淆</a></li>
+            <li><a href="Pictures_folders.html" target="_blank">图片存储文件夹</a></li>
+            <li><a href="Overlay_image2.html" target="_blank">幻影坦克2</a></li>
+            <li><a href="Overlay_image3.4.html" target="_blank">幻影坦克3.4</a></li>
+        </ul>
+    </nav>
+    <script>
+        // 简单的JavaScript，当鼠标悬停在链接上时改变背景颜色
+        const links = document.querySelectorAll('nav a');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', function() {
+                this.style.backgroundColor = '#d1b3f4'; /* 更改悬浮时的背景色 */
+            });
+            link.addEventListener('mouseleave', function() {
+                this.style.backgroundColor = 'transparent';
+            });
+        });
+    </script>
+</body>
+</html>
