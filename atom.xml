@@ -6,7 +6,7 @@
   <link href="http://example.com/atom.xml" rel="self"/>
   
   <link href="http://example.com/"/>
-  <updated>2024-09-30T17:14:32.479Z</updated>
+  <updated>2024-10-06T13:57:21.039Z</updated>
   <id>http://example.com/</id>
   
   <author>
@@ -15,6 +15,23 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>八（3）班义卖活动</title>
+    <link href="http://example.com/2024/10/06/%E5%85%AB%EF%BC%883%EF%BC%89%E7%8F%AD%E4%B9%89%E5%8D%96%E6%B4%BB%E5%8A%A8/"/>
+    <id>http://example.com/2024/10/06/%E5%85%AB%EF%BC%883%EF%BC%89%E7%8F%AD%E4%B9%89%E5%8D%96%E6%B4%BB%E5%8A%A8/</id>
+    <published>2024-10-06T13:35:26.000Z</published>
+    <updated>2024-10-06T13:57:21.039Z</updated>
+    
+    
+    <summary type="html">&lt;h1 id=&quot;八三班文宣部十月六日宣&quot;&gt;&lt;a href=&quot;#八三班文宣部十月六日宣&quot; class=&quot;headerlink&quot; title=&quot;八三班文宣部十月六日宣&quot;&gt;&lt;/a&gt;八三班文宣部十月六日宣&lt;/h1&gt;&lt;p&gt;国庆临近，三四班进行了一场精彩的义卖活动。</summary>
+    
+    
+    
+    
+    <category term="三班新闻" scheme="http://example.com/tags/%E4%B8%89%E7%8F%AD%E6%96%B0%E9%97%BB/"/>
+    
+  </entry>
   
   <entry>
     <title>国庆快乐</title>
