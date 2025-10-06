@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>中秋节文化研究 - HaveCake</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* Reset default styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Global styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3a5f, #0d1b2a);
+            color: white;
+            overflow-x: hidden;
+            text-align: center;
+            margin: 0;
+            transition: all 0.3s ease-in-out;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(30, 58, 95, 0.9);
+            padding: 15px 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #ff8c00;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .logo i {
+            margin-right: 10px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin: 0 15px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: #ff8c00;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #ff8c00;
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Header Section */
+        .header {
+            background: linear-gradient(135deg, rgba(255, 140, 0, 0.8), rgba(255, 183, 50, 0.7)), url('https://images.unsplash.com/photo-1531058020387-3be344556be6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            z-index: 2;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .header h1:hover {
+            transform: scale(1.05);
+        }
+
+        .header p {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+        }
+
+        .moon {
+            position: absolute;
+            top: 15%;
+            right: 10%;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fff, #ffd700);
+            box-shadow: 0 0 50px rgba(255, 215, 0, 0.7);
+            animation: moonMove 15s infinite ease-in-out;
+            z-index: 1;
+        }
+
+        /* Moon animation */
+        @keyframes moonMove {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+            100% { transform: translateY(0) rotate(0deg); }
+        }
+
+        /* Content Section */
+        .content {
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 50px 30px;
+            margin: 50px auto;
+            border-radius: 15px;
+            max-width: 1000px;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .content h2 {
+            font-size: 2.5rem;
+            color: #FF8C00;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            text-align: left;
+        }
+
+        /* Button Styles */
+        .btn {
+            background: linear-gradient(135deg, #ff8c00, #ff6b00);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2em;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.4);
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #ff6b00, #ff8c00);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.6);
+        }
+
+        .btn-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        /* Card style for each content section */
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            margin-top: 20px;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Timeline Section */
+        .timeline-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background: linear-gradient(to bottom, #ff8c00, #ffd700);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+            border-radius: 10px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .timeline-content.active {
+            background: rgba(255, 140, 0, 0.2);
+            border: 1px solid rgba(255, 140, 0, 0.5);
+        }
+
+        .timeline-content h3 {
+            color: #ff8c00;
+            margin-bottom: 10px;
+        }
+
+        .timeline-content p {
+            display: none;
+            text-align: left;
+            margin-top: 10px;
+        }
+
+        .timeline-content.active p {
+            display: block;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff8c00;
+            border: 4px solid #1e3a5f;
+            border-radius: 50%;
+            top: 15px;
+            z-index: 1;
+        }
+
+        .timeline-item:nth-child(odd)::after {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even)::after {
+            left: -10px;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 30px 0;
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .footer-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer p {
+            margin: 10px 0;
+        }
+
+        .social-icons {
+            margin: 20px 0;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 15px;
+            transition: color 0.3s ease;
+        }
+
+        .social-icons a:hover {
+            color: #ff8c00;
+        }
+
+        /* Page transition */
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Gallery Section */
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .gallery-item {
+            width: 300px;
+            height: 200px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Map Section */
+        .map-container {
+            margin-top: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Research Topics Page */
+        .topics-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin: 50px 0;
+        }
+
+        .topic-card {
+            width: 250px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .topic-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .topic-icon {
+            font-size: 3rem;
+            color: #ff8c00;
+            margin-bottom: 20px;
+        }
+
+        .topic-card h3 {
+            font-size: 1.5rem;
+            color: #ff8c00;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .topic-card p {
+            text-align: center;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .content {
+                padding: 30px 15px;
+            }
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            .card {
+                padding: 15px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .timeline::after {
+                left: 31px;
+            }
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+            .timeline-item:nth-child(even) {
+                left: 0;
+            }
+            .timeline-item::after {
+                left: 21px;
+            }
+            .timeline-item:nth-child(odd)::after,
+            .timeline-item:nth-child(even)::after {
+                left: 21px;
+            }
+            .gallery-item {
+                width: 100%;
+            }
+            .btn-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .btn {
+                width: 80%;
+                margin: 10px 0;
+            }
+            .topics-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .topic-card {
+                width: 90%;
+                height: auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="logo" onclick="showPage('home')">
+            <i class="fas fa-moon"></i>
+            <span>中秋文化研究</span>
+        </div>
+        <ul class="nav-links">
+            <li><a href="#" onclick="showPage('home')">首页</a></li>
+            <li><a href="#" onclick="showPage('topics')">研究课题</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Home Page -->
+<div id="home" class="page active">
+    <!-- Header Section -->
+    <div class="header">
+        <div class="moon"></div>
+        <div class="header-content">
+            <h1>中秋节文化研究</h1>
+            <p>探索中秋节的历史与文化变迁</p>
+            <button class="btn" onclick="showPage('topics')">探索研究课题</button>
+        </div>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="content" id="content">
+        <h2>项目概述</h2>
+        <p>本项目深入探讨了中秋节的历史演变及其在当代的文化意义。通过对不同历史时期的中秋节庆祝方式进行分析，我们理解了其文化符号如"团圆"与"月亮"在社会中的象征作用。</p>
+        <p>研究指出，中秋节不仅仅是一个节日，更是一种文化认同的体现，它反映了中国社会的历史变迁与传统的延续。</p>
+        <p>项目的目标是研究中秋节在全球化背景下如何演变，并且与其他文化中的类似节日进行比较，以探讨其跨文化的影响力。</p>
+
+        <div class="btn-container">
+            <button class="btn" onclick="showPage('topics')">浏览研究课题</button>
+        </div>
+    </div>
+</div>
+
+<!-- Research Topics Page -->
+<div id="topics" class="page">
+    <div class="header">
+        <div class="header-content">
+            <h1>中秋节研究课题</h1>
+            <p>选择您感兴趣的研究方向</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>研究课题</h2>
+        <p>我们针对中秋节的不同方面进行了深入研究，以下是四个主要研究方向：</p>
+
+        <div class="topics-container">
+            <div class="topic-card" onclick="showPage('history')">
+                <div class="topic-icon">
+                    <i class="fas fa-history"></i>
+                </div>
+                <h3>中秋节的历史演变</h3>
+                <p>探索中秋节从古代祭祀仪式到现代节日的千年变迁历程</p>
+            </div>
+
+            <div class="topic-card" onclick="showPage('culture')">
+                <div class="topic-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <h3>中秋节的文化内涵</h3>
+                <p>深入理解中秋节蕴含的团圆、感恩与月亮崇拜等文化意义</p>
+            </div>
+
+            <div class="topic-card" onclick="showPage('timeline')">
+                <div class="topic-icon">
+                    <i class="fas fa-stream"></i>
+                </div>
+                <h3>中秋节发展进程</h3>
+                <p>通过时间轴了解中秋节在不同朝代的演变与发展</p>
+            </div>
+
+            <div class="topic-card" onclick="showPage('global')">
+                <div class="topic-icon">
+                    <i class="fas fa-globe-asia"></i>
+                </div>
+                <h3>全球化背景下的中秋节</h3>
+                <p>探索中秋节在世界各地的传播、影响与文化融合</p>
+            </div>
+        </div>
+
+        <button class="btn" onclick="showPage('home')">返回首页</button>
+    </div>
+</div>
+
+<!-- History Page -->
+<div id="history" class="page">
+    <div class="header">
+        <div class="header-content">
+            <h1>中秋节的历史演变</h1>
+            <p>探索中秋节的千年历史变迁</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>中秋节的历史演变</h2>
+        <div class="card">
+            <h3>起源：古代月祭仪式</h3>
+            <p>中秋节的起源可以追溯到古代中国的"月祭"仪式。古代中国人通过祭月来祈求丰收与平安。月亮在古代社会中被视为天地之间的神圣象征，人们认为月亮有着神秘的力量。</p>
+            <p>据《周礼》记载，早在周朝时期，帝王就有春天祭日、秋天祭月的礼制。这种祭月活动最初主要在宫廷和贵族阶层中举行，后来逐渐传播到民间。</p>
+        </div>
+
+        <div class="card">
+            <h3>唐宋时期：从祭祀到赏月</h3>
+            <p>唐宋时期是中秋节形成和发展的重要阶段。唐代开始，中秋节逐渐从单纯的祭祀活动转变为赏月、饮酒、赋诗的娱乐性节日。</p>
+            <p>唐代诗人杜甫、李白等都有大量描写中秋月的诗篇。宋代时，中秋节已经成为全民性的重要节日，夜市通宵营业，赏月活动达到鼎盛。</p>
+        </div>
+
+        <div class="card">
+            <h3>元明清时期：月饼成为文化符号</h3>
+            <p>到了元明清时期，月饼成为了中秋节的重要文化符号。月饼的制作工艺更加精细，各地形成了不同风味的月饼品种。</p>
+            <p>在元代，月饼还与反抗元朝统治的传说联系起来，增添了民族情感色彩。明代时，中秋节习俗进一步丰富，出现了"走月亮"、"烧斗香"等特色活动。</p>
+        </div>
+
+        <div class="card">
+            <h3>现代：传统与现代的融合</h3>
+            <p>在现代社会，中秋节被列为国家法定节假日，传统与现代元素融合，月饼种类不断创新，成为中华文化的重要象征。</p>
+            <p>现代的中秋节庆祝活动，除了传统的团圆与祭月，许多地区还会通过节庆活动和商业推广，融入了更多现代的元素，如月饼的创新口味和月亮灯会。</p>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn" onclick="showPage('topics')">返回研究课题</button>
+            <button class="btn" onclick="showPage('home')">返回首页</button>
+        </div>
+    </div>
+</div>
+
+<!-- Timeline Page -->
+<div id="timeline" class="page">
+    <div class="header">
+        <div class="header-content">
+            <h1>中秋节发展进程</h1>
+            <p>探索中秋节的千年历史演变</p>
+        </div>
+    </div>
+
+    <div class="timeline-container">
+        <h2>中秋节历史时间轴</h2>
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>周朝 (公元前1046-256年)</h3>
+                    <p>中秋节的雏形可以追溯到周朝的"秋暮夕月"活动，当时帝王有春天祭日、秋天祭月的礼制。贵族和士大夫阶层也开始在这一天举行赏月活动。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>汉代 (公元前206-公元220年)</h3>
+                    <p>汉代开始出现"中秋"一词，但尚未形成固定节日。贵族和文人开始在秋夜赏月、饮酒、赋诗。赏月活动逐渐从宫廷扩展到民间。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>唐代 (618-907年)</h3>
+                    <p>中秋节在唐代开始成为固定节日，赏月活动盛行。唐玄宗曾在中秋夜与杨贵妃在太液池赏月。赏月、饮酒、赋诗成为文人雅士的重要活动。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>宋代 (960-1279年)</h3>
+                    <p>中秋节在宋代成为全民性节日，开始出现吃月饼的习俗。夜市通宵营业，赏月活动达到鼎盛。月饼制作工艺开始发展，成为节日特色食品。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>元代 (1271-1368年)</h3>
+                    <p>月饼开始成为中秋节的重要食品，并与反抗元朝统治的传说联系起来，增添了民族情感色彩。月饼中藏有密信反抗暴政的故事广为流传。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>明代 (1368-1644年)</h3>
+                    <p>中秋节习俗进一步丰富，出现了"走月亮"、"烧斗香"等特色活动。月饼制作工艺更加精细，各地形成了不同风味的月饼品种。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>清代 (1644-1912年)</h3>
+                    <p>中秋节庆祝活动达到巅峰，月饼种类繁多，赏月、祭月、团圆成为固定习俗，并延续至今。宫廷和民间的庆祝活动都极为盛大。</p>
+                </div>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-content" onclick="toggleTimelineContent(this)">
+                    <h3>现代 (20世纪至今)</h3>
+                    <p>中秋节被列为国家法定节假日，传统与现代元素融合，月饼种类不断创新，成为中华文化的重要象征。中秋节也成为全球华人共同庆祝的节日。</p>
+                </div>
+            </div>
+        </div>
+        <div class="btn-container">
+            <button class="btn" onclick="showPage('topics')">返回研究课题</button>
+            <button class="btn" onclick="showPage('home')">返回首页</button>
+        </div>
+    </div>
+</div>
+
+<!-- Culture Page -->
+<div id="culture" class="page">
+    <div class="header">
+        <div class="header-content">
+            <h1>中秋节文化内涵</h1>
+            <p>探索中秋节深厚的文化意义</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>中秋节的文化内涵</h2>
+        <div class="card">
+            <h3>团圆与家庭</h3>
+            <p>中秋节最核心的文化内涵是"团圆"。在这一天，无论身在何处，人们都会尽量回家与家人团聚，共享天伦之乐。这种对团圆的渴望体现了中国人重视家庭、重视亲情的传统价值观。团圆饭、赏月、分享月饼都是表达团圆的重要方式。</p>
+        </div>
+        <div class="card">
+            <h3>感恩与丰收</h3>
+            <p>中秋节起源于古代秋收后的祭祀活动，体现了人们对丰收的感恩之情。在这一天，人们感谢大自然的馈赠，祈求来年五谷丰登、生活美满。祭月仪式中的瓜果、粮食等供品，都象征着丰收和感恩。</p>
+        </div>
+        <div class="card">
+            <h3>月亮崇拜</h3>
+            <p>月亮在中秋节文化中具有特殊地位，象征着圆满、光明和美好。古代中国人相信月亮具有神秘力量，能够影响人间事务。赏月、祭月成为中秋节的重要活动。月亮的圆缺变化也被视为人生离合的象征。</p>
+        </div>
+        <div class="card">
+            <h3>诗词与艺术</h3>
+            <p>中秋节激发了无数文人墨客的创作灵感，产生了大量优美的诗词、绘画和音乐作品。这些艺术作品不仅丰富了中秋节的文化内涵，也成为中华文化宝库中的瑰宝。从李白的《静夜思》到苏轼的《水调歌头》，中秋主题的诗词流传千古。</p>
+        </div>
+
+        <h2 style="margin-top: 40px;">中秋节传统习俗</h2>
+        <div class="gallery">
+            <div class="gallery-item">
+                <img src="https://cdnjson.com/images/2025/10/06/default-1.jpg" alt="月饼">
+            </div>
+            <div class="gallery-item">
+                <img src="https://cdnjson.com/images/2025/10/06/default.jpg" alt="赏月">
+            </div>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn" onclick="showPage('topics')">返回研究课题</button>
+            <button class="btn" onclick="showPage('home')">返回首页</button>
+        </div>
+    </div>
+</div>
+
+<!-- Global Page -->
+<div id="global" class="page">
+    <div class="header">
+        <div class="header-content">
+            <h1>中秋节的全球影响</h1>
+            <p>探索中秋节在世界各地的传播与演变</p>
+        </div>
+    </div>
+
+    <div class="content">
+        <h2>中秋节的全球传播</h2>
+        <div class="card">
+            <h3>东南亚地区</h3>
+            <p>在越南、新加坡、马来西亚等东南亚国家，中秋节是重要的传统节日。这些国家的华人社区保留了赏月、吃月饼的习俗，同时也融入了当地文化元素。例如在越南，中秋节也是儿童节，孩子们会提着各种造型的灯笼游玩。</p>
+        </div>
+        <div class="card">
+            <h3>东亚地区</h3>
+            <p>在韩国和日本，中秋节也是重要传统节日，但庆祝方式和名称有所不同。韩国称为"秋夕"，是祭祖和扫墓的重要日子；日本称为"月见"，有赏月、吃团子的习俗。这些国家的庆祝方式既保留了中华文化的影响，又形成了独特的本土特色。</p>
+        </div>
+        <div class="card">
+            <h3>欧美地区</h3>
+            <p>随着华人移民的增加，中秋节在欧美国家也逐渐受到关注。许多城市会举办中秋庆典活动，向当地民众介绍这一中国传统节日。在纽约、伦敦、悉尼等国际大都市，中秋庆典已成为多元文化的重要组成部分。</p>
+        </div>
+        <div class="card">
+            <h3>文化融合与创新</h3>
+            <p>在全球化的背景下，中秋节不断吸收各地文化元素，形成了多元化的庆祝方式。同时，中秋文化也影响着世界各地的人们，成为跨文化交流的重要桥梁。现代中秋节庆祝活动融合了传统与现代元素，展现出强大的文化生命力。</p>
+        </div>
+
+        <h2 style="margin-top: 40px;">全球中秋节庆祝活动分布</h2>
+        <div class="map-container">
+            <img src="https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="全球中秋节分布" style="width: 100%;">
+        </div>
+
+        <div class="btn-container">
+            <button class="btn" onclick="showPage('topics')">返回研究课题</button>
+            <button class="btn" onclick="showPage('home')">返回首页</button>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <div class="footer-content">
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-weixin"></i></a>
+            <a href="#"><i class="fab fa-weibo"></i></a>
+            <a href="#"><i class="fab fa-qq"></i></a>
+            <a href="#"><i class="fab fa-github"></i></a>
+        </div>
+        <p>HaveCake © 2025</p>
+        <p>联系我：HaveCake@20110228.xyz</p>
+    </div>
+</div>
+
+<script>
+    // Page navigation
+    function showPage(pageId) {
+        // Hide all pages
+        document.querySelectorAll('.page').forEach(page => {
+            page.classList.remove('active');
+        });
+
+        // Show selected page
+        document.getElementById(pageId).classList.add('active');
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+    }
+
+    // Timeline functionality
+    function toggleTimelineContent(element) {
+        // Remove active class from all timeline items
+        document.querySelectorAll('.timeline-content').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        // Add active class to clicked item
+        element.classList.add('active');
+    }
+</script>
+
+</body>
+</html>
